@@ -159,6 +159,16 @@ namespace Game2048
                         return;
                 }
             }
+            for (var x = 0; x < 4; x++)
+            {
+                for (int y = 0, y1 = 1; y1 < 4; y++, y1++)
+                {
+                    if (Tiles[x, y].Value == Tiles[x, y1].Value)
+                        return;
+                    if (Tiles[y, x].Value == Tiles[y1, x].Value)
+                        return;
+                }
+            }
 
             await Task.Delay(300);
             RaiseAlert("You lost!");

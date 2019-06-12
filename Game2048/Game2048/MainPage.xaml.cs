@@ -37,7 +37,7 @@ namespace Game2048
 
         private async void Alert(string message)
         {
-            await DisplayAlert("Alert", message, "OK");
+            await DisplayAlert("Message", message, "OK");
             _bindingContext.Reset.Execute(null);
         }
     }

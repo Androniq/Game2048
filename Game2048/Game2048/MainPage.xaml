@@ -12,12 +12,24 @@
         <local:ArrayPicker x:Key="ArrayPicker" />
     </ContentPage.Resources>
     <StackLayout>
-        <Grid HorizontalOptions="FillAndExpand" VerticalOptions="StartAndExpand" Margin="5">
+        <Grid
+            Margin="5"
+            HorizontalOptions="FillAndExpand"
+            VerticalOptions="StartAndExpand">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <Frame Grid.Row="0" Padding="0">
+            <Label
+                Grid.Row="0"
+                Margin="5"
+                FontAttributes="Bold"
+                FontSize="Large"
+                HorizontalOptions="FillAndExpand"
+                HorizontalTextAlignment="End"
+                Text="{Binding Score}" />
+            <Frame Grid.Row="1" Padding="0">
                 <Grid
                     ColumnSpacing="0"
                     HorizontalOptions="Center"
@@ -140,7 +152,7 @@
                     <SwipeGestureRecognizer Command="{Binding SwipeDown}" Direction="Down" />
                 </Frame.GestureRecognizers>
             </Frame>
-            <Grid Grid.Row="1">
+            <Grid Grid.Row="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />

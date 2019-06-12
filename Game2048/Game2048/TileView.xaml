@@ -18,6 +18,8 @@
                 x:Name="Fill"
                 HeightRequest="{Binding Unit, Source={x:Static local:Sizes.Instance}}"
                 IsVisible="{Binding HasValue}"
+                MinimumHeightRequest="{Binding Unit, Source={x:Static local:Sizes.Instance}}"
+                MinimumWidthRequest="{Binding Unit, Source={x:Static local:Sizes.Instance}}"
                 WidthRequest="{Binding Unit, Source={x:Static local:Sizes.Instance}}">
                 <BoxView
                     Margin="0"
@@ -26,7 +28,8 @@
                     WidthRequest="{Binding Unit, Source={x:Static local:Sizes.Instance}}"
                     Color="{Binding Value2, Converter={StaticResource ValueColorConverter}}" />
                 <Label
-                    HorizontalOptions="Center"
+                    HorizontalOptions="CenterAndExpand"
+                    HorizontalTextAlignment="Center"
                     Text="{Binding Value2}"
                     VerticalOptions="Center" />
             </Grid>
@@ -34,6 +37,8 @@
                 x:Name="Fill2"
                 HeightRequest="{Binding Unit, Source={x:Static local:Sizes.Instance}}"
                 IsVisible="false"
+                MinimumHeightRequest="{Binding Unit, Source={x:Static local:Sizes.Instance}}"
+                MinimumWidthRequest="{Binding Unit, Source={x:Static local:Sizes.Instance}}"
                 WidthRequest="{Binding Unit, Source={x:Static local:Sizes.Instance}}">
                 <BoxView
                     Margin="0"
@@ -42,10 +47,11 @@
                     WidthRequest="{Binding Unit, Source={x:Static local:Sizes.Instance}}"
                     Color="{Binding Value2, Converter={StaticResource ValueColorConverter}}" />
                 <Label
-                    HorizontalOptions="Center"
+                    HorizontalOptions="CenterAndExpand"
+                    HorizontalTextAlignment="Center"
                     Text="{Binding Value2}"
                     VerticalOptions="Center" />
-            </Grid>        
+            </Grid>
         </Grid>
     </ContentView.Content>
 </ContentView>

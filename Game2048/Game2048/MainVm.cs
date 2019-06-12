@@ -21,6 +21,17 @@ namespace Game2048
 
         public event Action<string> Alert;
 
+        private int _score;
+
+        /// <summary>
+        /// Gets or sets Score value.
+        /// </summary>
+        public int Score
+        {
+            get => _score;
+            set => SetValue(ref _score, value);
+        }
+
         public MainVm()
         {
             _random = new Random();
@@ -125,6 +136,8 @@ namespace Game2048
                 }
             }
 
+            Score = 0;
+
             AddTile();
             AddTile();
         }
@@ -194,6 +207,7 @@ namespace Game2048
                     else if (prevTile.Value == tile.Value)
                     {
                         prevTile.SetValue(2 * tile.Value);
+                        Score += 2 * tile.Value;
                         tile.Clear();
                         success = true;
                         newIndex++;

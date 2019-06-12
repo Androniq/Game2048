@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Game2048.Mvvm;
+using PCLStorage;
 using Xamarin.Forms;
 
 namespace Game2048
@@ -29,7 +30,24 @@ namespace Game2048
         public int Score
         {
             get => _score;
-            set => SetValue(ref _score, value);
+            set => SetValue(ref _score, value, ScoreChanged);
+        }
+
+        private void ScoreChanged(int newValue)
+        {
+            if (newValue > HighScore)
+                HighScore = newValue;
+        }
+
+        private int _highScore;
+
+        /// <summary>
+        /// Gets or sets HighScore value.
+        /// </summary>
+        public int HighScore
+        {
+            get => _highScore;
+            set => SetValue(ref _highScore, value);
         }
 
         public MainVm()
@@ -62,9 +80,6 @@ namespace Game2048
                     _navigator[SwipeDirection.Down][y].Insert(0, tile);
                 }
             }
-
-            AddTile();
-            AddTile();
 
             SwipeLeft = new Command(SwipeLeftCommand);
             SwipeRight = new Command(SwipeRightCommand);
@@ -126,7 +141,7 @@ namespace Game2048
 
         public ICommand Reset { get; }
 
-        private void ResetCommand()
+        private async void ResetCommand()
         {
             for (var x = 0; x < 4; x++)
             {
@@ -140,12 +155,17 @@ namespace Game2048
 
             AddTile();
             AddTile();
+
+            await SaveState();
         }
 
-        private void Swipe(SwipeDirection direction)
+        private async void Swipe(SwipeDirection direction)
         {
             if (TrySwipe(direction))
+            {
                 AddTile();
+                await SaveState();
+            }
             CheckEmpty();
         }
 
@@ -247,6 +267,64 @@ namespace Game2048
         private void RaiseAlert(string message)
         {
             Alert?.Invoke(message);
+        }
+
+        public async Task SaveState()
+        {
+            var storage = FileSystem.Current.LocalStorage;
+            var file = await storage.CreateFileAsync("state", CreationCollisionOption.ReplaceExisting);
+            await file.WriteAllTextAsync(GetState());
+        }
+
+        public async Task LoadState()
+        {
+            var storage = FileSystem.Current.LocalStorage;
+            //var fileExists = await storage.CheckExistsAsync("state");
+            var file = await storage.CreateFileAsync("state", CreationCollisionOption.OpenIfExists);
+            SetState(await file.ReadAllTextAsync());
+        }
+
+        private string GetState()
+        {
+            var sb = new StringBuilder();
+            for (var x = 0; x < 4; x++)
+            {
+                for (var y = 0; y < 4; y++)
+                {
+                    sb.Append(Tiles[x, y].HasValue ? Tiles[x, y].Value : 0);
+                    sb.Append(",");
+                }
+            }
+            sb.Append(Score);
+            sb.Append(",");
+            sb.Append(HighScore);
+            return sb.ToString();
+        }
+
+        private void SetState(string state)
+        {
+            if (string.IsNullOrEmpty(state))
+            {
+                ResetCommand();
+                return;
+            }
+            var numbers = state.Split(',');
+            if (numbers.Length != 18)
+                throw new FormatException();
+            var index = 0;
+            for (var x = 0; x < 4; x++)
+            {
+                for (var y = 0; y < 4; y++)
+                {
+                    var value = int.Parse(numbers[index++]);
+                    if (value > 0)
+                        Tiles[x, y].SetValue(value);
+                    else
+                        Tiles[x, y].Clear();
+                }
+            }
+            Score = int.Parse(numbers[index++]);
+            HighScore = int.Parse(numbers[index]);
         }
     }
 }

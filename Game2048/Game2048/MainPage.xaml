@@ -21,14 +21,46 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <Label
-                Grid.Row="0"
-                Margin="5"
-                FontAttributes="Bold"
-                FontSize="Large"
-                HorizontalOptions="FillAndExpand"
-                HorizontalTextAlignment="End"
-                Text="{Binding Score}" />
+            <Grid Grid.Row="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Label
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    HorizontalOptions="Start"
+                    Text="Score:"
+                    VerticalOptions="Center" />
+                <Label
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    HorizontalOptions="Start"
+                    Text="High Score:"
+                    VerticalOptions="Center" />
+                <Label
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    Margin="5"
+                    FontAttributes="Bold"
+                    FontSize="Large"
+                    HorizontalOptions="FillAndExpand"
+                    HorizontalTextAlignment="End"
+                    Text="{Binding Score}" />
+                <Label
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Margin="5"
+                    FontAttributes="Bold"
+                    FontSize="Large"
+                    HorizontalOptions="FillAndExpand"
+                    HorizontalTextAlignment="End"
+                    Text="{Binding HighScore}" />
+            </Grid>
             <Frame Grid.Row="1" Padding="0">
                 <Grid
                     ColumnSpacing="0"

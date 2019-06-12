@@ -83,7 +83,7 @@ namespace Game2048
             Width70Percent = 0.7 * width;
             Unit = 0.15 * width;
             Margin = 0.02 * width;
-            CornerRadius = new CornerRadius(0.05 * width);
+            CornerRadius = new CornerRadius(0.02 * width);
         }
     }
 }

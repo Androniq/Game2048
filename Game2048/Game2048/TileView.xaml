@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentView
+    x:Class="Game2048.TileView"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:Game2048;assembly=Game2048"
+    Margin="0"
+    Padding="0"
+    BindingContextChanged="OnBindingContextChanged"
+    HeightRequest="{Binding Unit, Source={x:Static local:Sizes.Instance}}"
+    WidthRequest="{Binding Unit, Source={x:Static local:Sizes.Instance}}">
+    <ContentView.BindingContext>
+        <local:TileVm />
+    </ContentView.BindingContext>
+    <ContentView.Content>
+        <Grid>
+            <Grid
+                x:Name="Fill"
+                HeightRequest="{Binding Unit, Source={x:Static local:Sizes.Instance}}"
+                IsVisible="{Binding HasValue}"
+                WidthRequest="{Binding Unit, Source={x:Static local:Sizes.Instance}}">
+                <BoxView
+                    Margin="0"
+                    CornerRadius="{Binding CornerRadius, Source={x:Static local:Sizes.Instance}}"
+                    HeightRequest="{Binding Unit, Source={x:Static local:Sizes.Instance}}"
+                    WidthRequest="{Binding Unit, Source={x:Static local:Sizes.Instance}}"
+                    Color="{Binding Value2, Converter={StaticResource ValueColorConverter}}" />
+                <Label
+                    HorizontalOptions="Center"
+                    Text="{Binding Value2}"
+                    VerticalOptions="Center" />
+            </Grid>
+            <Grid
+                x:Name="Fill2"
+                HeightRequest="{Binding Unit, Source={x:Static local:Sizes.Instance}}"
+                IsVisible="false"
+                WidthRequest="{Binding Unit, Source={x:Static local:Sizes.Instance}}">
+                <BoxView
+                    Margin="0"
+                    CornerRadius="{Binding CornerRadius, Source={x:Static local:Sizes.Instance}}"
+                    HeightRequest="{Binding Unit, Source={x:Static local:Sizes.Instance}}"
+                    WidthRequest="{Binding Unit, Source={x:Static local:Sizes.Instance}}"
+                    Color="{Binding Value2, Converter={StaticResource ValueColorConverter}}" />
+                <Label
+                    HorizontalOptions="Center"
+                    Text="{Binding Value2}"
+                    VerticalOptions="Center" />
+            </Grid>        
+        </Grid>
+    </ContentView.Content>
+</ContentView>

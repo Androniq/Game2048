@@ -140,6 +140,7 @@ namespace Game2048
                 IsBusy = true;
                 IsStarting = false;
                 await LoadImages();
+                await LoadState();
             }
             finally
             {
@@ -418,7 +419,6 @@ namespace Game2048
             {
                 IsStarting = true;
                 await LoadSets();
-                await LoadState();
             }
             finally
             {

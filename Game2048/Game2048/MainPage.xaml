@@ -13,7 +13,7 @@
         <local:ArrayPicker x:Key="ArrayPicker" />
     </ContentPage.Resources>
     <AbsoluteLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
-        <StackLayout IsVisible="{Binding IsBusy, Converter={StaticResource InvertedBoolConverter}}">
+        <StackLayout IsVisible="{Binding IsBusyOrStarting, Converter={StaticResource InvertedBoolConverter}}">
             <Grid
                 Margin="5"
                 HorizontalOptions="FillAndExpand"
@@ -207,16 +207,21 @@
             </Grid>
         </StackLayout>
         <Grid
-            AbsoluteLayout.LayoutFlags="All"
+            IsVisible="{Binding IsBusyOrStarting}"
             AbsoluteLayout.LayoutBounds="0.5,0.5,0.5,0.5"
+            AbsoluteLayout.LayoutFlags="All"
             HorizontalOptions="Center"
-            IsVisible="{Binding IsBusy}"
             VerticalOptions="Center">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
+            <Picker
+                Grid.Row="0"
+                IsVisible="{Binding IsStarting}"
+                ItemsSource="{Binding Sets}"
+                SelectedItem="{Binding Set, Mode=TwoWay}" />
             <ActivityIndicator
                 Grid.Row="0"
                 HorizontalOptions="Center"
@@ -228,7 +233,6 @@
                 FontSize="Large"
                 HorizontalOptions="Center"
                 HorizontalTextAlignment="Center"
-                IsVisible="{Binding IsBusy}"
                 Text="{Binding Progress}"
                 TextColor="DeepPink"
                 VerticalOptions="Center"

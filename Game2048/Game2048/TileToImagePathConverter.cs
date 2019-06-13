@@ -15,7 +15,7 @@ namespace Game2048
                 x = 4096;
             if (x < 2)
                 x = 2;
-            return $"/storage/emulated/0/DCIM/Download/{x}.gif";
+            return $"/storage/emulated/0/DCIM/Download/{MainVm.SelectedSet}/{x}.gif";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -99,6 +100,8 @@ namespace Game2048
             SwipeUp = new Command(SwipeUpCommand);
             SwipeDown = new Command(SwipeDownCommand);
             Reset = new Command(ResetCommand);
+
+            Sets = new ObservableCollection<string>();
         }
 
         private string _progress;
@@ -114,13 +117,49 @@ namespace Game2048
 
         private double _progressWidth;
 
+        private string _set;
+
         /// <summary>
-        /// Gets or sets ProgressWidth value.
+        /// Gets or sets Set value.
         /// </summary>
-        public double ProgressWidth
+        public string Set
         {
-            get => _progressWidth;
-            set => SetValue(ref _progressWidth, value);
+            get => _set;
+            set => SetValue(ref _set, value, SetChanged);
+        }
+
+        private async void SetChanged(string newValue)
+        {
+            if (string.IsNullOrEmpty(newValue))
+                return;
+            if (!string.IsNullOrEmpty(SelectedSet))
+                return;
+            SelectedSet = newValue;
+            try
+            {
+                IsBusy = true;
+                IsStarting = false;
+                await LoadImages();
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        public ObservableCollection<string> Sets { get; }
+
+        public static string SelectedSet { get; private set; }
+
+        public async Task LoadSets()
+        {
+            var folder = await FileSystem.Current.GetFolderFromPathAsync("/storage/emulated/0/DCIM/Download/");
+            var items = await folder.GetFoldersAsync();
+            foreach (var item in items)
+            {
+                Sets.Add(item.Name);
+            }
+            Progress = "Pick a set";
         }
 
         public async Task LoadImages()
@@ -129,11 +168,10 @@ namespace Game2048
             Progress = "Progress: 0%";
             for (int x = 2, progress = 1; x < 8192; x *= 2, progress++)
             {
-                await service.LoadFile($"/storage/emulated/0/DCIM/Download/{x}.gif").Preload().RunAsync();
+                await service.LoadFile($"/storage/emulated/0/DCIM/Download/{SelectedSet}/{x}.gif").Preload().RunAsync();
                 var pct = Math.Min(100, progress * 100 / 12);
                 Progress = $"Progress: {pct}%";
                 ((MainPage)Application.Current.MainPage).SetProgress(pct);
-                //ProgressWidth = (Sizes.Width70Percent - 6) * pct / 100;
             }
         }
 
@@ -344,20 +382,46 @@ namespace Game2048
         public bool IsBusy
         {
             get => _isBusy;
-            set => SetValue(ref _isBusy, value);
+            set => SetValue(ref _isBusy, value, UpdateBusy);
+        }
+
+        private void UpdateBusy()
+        {
+            IsBusyOrStarting = IsBusy || IsStarting;
+        }
+
+        private bool _isStarting;
+
+        /// <summary>
+        /// Gets or sets IsStarting value.
+        /// </summary>
+        public bool IsStarting
+        {
+            get => _isStarting;
+            set => SetValue(ref _isStarting, value, UpdateBusy);
+        }
+        
+        private bool _isBusyOrStarting;
+
+        /// <summary>
+        /// Gets or sets IsBusyOrStarting value.
+        /// </summary>
+        public bool IsBusyOrStarting
+        {
+            get => _isBusyOrStarting;
+            set => SetValue(ref _isBusyOrStarting, value);
         }
 
         public async Task Init()
         {
             try
             {
-                IsBusy = true;
-                await LoadImages();
+                IsStarting = true;
+                await LoadSets();
                 await LoadState();
             }
             finally
             {
-                IsBusy = false;
             }
         }
 

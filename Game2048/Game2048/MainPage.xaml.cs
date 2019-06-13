@@ -40,5 +40,10 @@ namespace Game2048
             await DisplayAlert("Message", message, "OK");
             _bindingContext.Reset.Execute(null);
         }
+
+        public void SetProgress(int percentage)
+        {
+            Filler.WidthRequest = Back.Width * percentage / 100;
+        }
     }
 }

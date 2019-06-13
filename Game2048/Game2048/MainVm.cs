@@ -101,15 +101,40 @@ namespace Game2048
             Reset = new Command(ResetCommand);
         }
 
+        private string _progress;
+
+        /// <summary>
+        /// Gets or sets Progress value.
+        /// </summary>
+        public string Progress
+        {
+            get => _progress;
+            set => SetValue(ref _progress, value);
+        }
+
+        private double _progressWidth;
+
+        /// <summary>
+        /// Gets or sets ProgressWidth value.
+        /// </summary>
+        public double ProgressWidth
+        {
+            get => _progressWidth;
+            set => SetValue(ref _progressWidth, value);
+        }
+
         public async Task LoadImages()
         {
-            var service = FFImageLoading.ImageService.Instance;
-            var list = new List<IImageLoaderTask>();
-            for (var x = 2; x < 8192; x *= 2)
+            var service = ImageService.Instance;
+            Progress = "Progress: 0%";
+            for (int x = 2, progress = 1; x < 8192; x *= 2, progress++)
             {
-                list.Add(service.LoadFile($"/storage/emulated/0/DCIM/Download/{x}.gif").Preload());
+                await service.LoadFile($"/storage/emulated/0/DCIM/Download/{x}.gif").Preload().RunAsync();
+                var pct = Math.Min(100, progress * 100 / 12);
+                Progress = $"Progress: {pct}%";
+                ((MainPage)Application.Current.MainPage).SetProgress(pct);
+                //ProgressWidth = (Sizes.Width70Percent - 6) * pct / 100;
             }
-            await Task.WhenAll(list.Select(it => it.RunAsync()));
         }
 
         private bool AddTile()

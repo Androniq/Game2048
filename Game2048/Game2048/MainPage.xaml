@@ -12,7 +12,7 @@
     <ContentPage.Resources>
         <local:ArrayPicker x:Key="ArrayPicker" />
     </ContentPage.Resources>
-    <AbsoluteLayout>
+    <AbsoluteLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
         <StackLayout IsVisible="{Binding IsBusy, Converter={StaticResource InvertedBoolConverter}}">
             <Grid
                 Margin="5"
@@ -206,9 +206,55 @@
                 </Grid>
             </Grid>
         </StackLayout>
-        <ActivityIndicator
-            HorizontalOptions="CenterAndExpand"
-            IsRunning="{Binding IsBusy}"
-            VerticalOptions="CenterAndExpand" />
+        <Grid
+            AbsoluteLayout.LayoutFlags="All"
+            AbsoluteLayout.LayoutBounds="0.5,0.5,0.5,0.5"
+            HorizontalOptions="Center"
+            IsVisible="{Binding IsBusy}"
+            VerticalOptions="Center">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <ActivityIndicator
+                Grid.Row="0"
+                HorizontalOptions="Center"
+                IsRunning="{Binding IsBusy}"
+                VerticalOptions="Center" />
+            <Label
+                Grid.Row="1"
+                FontAttributes="Bold"
+                FontSize="Large"
+                HorizontalOptions="Center"
+                HorizontalTextAlignment="Center"
+                IsVisible="{Binding IsBusy}"
+                Text="{Binding Progress}"
+                TextColor="DeepPink"
+                VerticalOptions="Center"
+                VerticalTextAlignment="Center" />
+            <Grid
+                Grid.Row="2"
+                HeightRequest="40"
+                WidthRequest="{Binding Sizes.Width70Percent}">
+                <BoxView
+                    HeightRequest="40"
+                    WidthRequest="{Binding Sizes.Width70Percent}"
+                    Color="DeepPink" />
+                <BoxView
+                    x:Name="Back"
+                    Margin="3"
+                    HeightRequest="34"
+                    Color="Black" />
+                <BoxView
+                    x:Name="Filler"
+                    Margin="3"
+                    HeightRequest="34"
+                    HorizontalOptions="Start"
+                    VerticalOptions="Center"
+                    WidthRequest="0"
+                    Color="Pink" />
+            </Grid>
+        </Grid>
     </AbsoluteLayout>
 </ContentPage>

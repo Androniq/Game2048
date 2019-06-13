@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <PackageReference Include="PCLStorage" Version="1.0.2" />
+    <PackageReference Include="Xamarin.FFImageLoading.Svg.Forms" Version="2.4.11.982" />
     <PackageReference Include="Xamarin.Forms" Version="4.0.0.482894" />
   </ItemGroup>
 

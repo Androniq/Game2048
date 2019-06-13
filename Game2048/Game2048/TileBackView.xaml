@@ -8,6 +8,7 @@
         <BoxView
             CornerRadius="{Binding CornerRadius, Source={x:Static local:Sizes.Instance}}"
             HeightRequest="{Binding Unit, Source={x:Static local:Sizes.Instance}}"
+            Opacity="0.2"
             WidthRequest="{Binding Unit, Source={x:Static local:Sizes.Instance}}"
             Color="LightGray" />
     </ContentView.Content>

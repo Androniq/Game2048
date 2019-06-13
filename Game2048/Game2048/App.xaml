@@ -3,8 +3,10 @@
     x:Class="Game2048.App"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:game2048="clr-namespace:Game2048;assembly=Game2048">
+    xmlns:local="clr-namespace:Game2048;assembly=Game2048">
     <Application.Resources>
-        <game2048:ValueColorConverter x:Key="ValueColorConverter" />
+        <local:ValueColorConverter x:Key="ValueColorConverter" />
+        <local:TileToImagePathConverter x:Key="TileToImagePath" />
+        <local:InvertedBoolConverter x:Key="InvertedBoolConverter" />
     </Application.Resources>
 </Application>

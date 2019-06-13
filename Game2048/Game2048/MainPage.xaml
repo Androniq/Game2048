@@ -3,6 +3,7 @@
     x:Class="Game2048.MainPage"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:forms="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
     xmlns:local="clr-namespace:Game2048"
     BindingContextChanged="OnBindingContextChanged">
     <ContentPage.BindingContext>
@@ -11,191 +12,203 @@
     <ContentPage.Resources>
         <local:ArrayPicker x:Key="ArrayPicker" />
     </ContentPage.Resources>
-    <StackLayout>
-        <Grid
-            Margin="5"
-            HorizontalOptions="FillAndExpand"
-            VerticalOptions="StartAndExpand">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-            <Grid Grid.Row="0">
+    <AbsoluteLayout>
+        <StackLayout IsVisible="{Binding IsBusy, Converter={StaticResource InvertedBoolConverter}}">
+            <Grid
+                Margin="5"
+                HorizontalOptions="FillAndExpand"
+                VerticalOptions="StartAndExpand">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <Label
-                    Grid.Row="0"
-                    Grid.Column="0"
-                    HorizontalOptions="Start"
-                    Text="Score:"
-                    VerticalOptions="Center" />
-                <Label
-                    Grid.Row="1"
-                    Grid.Column="0"
-                    HorizontalOptions="Start"
-                    Text="High Score:"
-                    VerticalOptions="Center" />
-                <Label
-                    Grid.Row="0"
-                    Grid.Column="1"
-                    Margin="5"
-                    FontAttributes="Bold"
-                    FontSize="Large"
-                    HorizontalOptions="FillAndExpand"
-                    HorizontalTextAlignment="End"
-                    Text="{Binding Score}" />
-                <Label
-                    Grid.Row="1"
-                    Grid.Column="1"
-                    Margin="5"
-                    FontAttributes="Bold"
-                    FontSize="Large"
-                    HorizontalOptions="FillAndExpand"
-                    HorizontalTextAlignment="End"
-                    Text="{Binding HighScore}" />
-            </Grid>
-            <Frame Grid.Row="1" Padding="0">
-                <Grid
-                    ColumnSpacing="0"
-                    HorizontalOptions="Center"
-                    RowSpacing="0"
-                    VerticalOptions="Center">
+                <Grid Grid.Row="0">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="{Binding Sizes.Margin}" />
-                        <RowDefinition Height="{Binding Sizes.Unit}" />
-                        <RowDefinition Height="{Binding Sizes.Margin}" />
-                        <RowDefinition Height="{Binding Sizes.Unit}" />
-                        <RowDefinition Height="{Binding Sizes.Margin}" />
-                        <RowDefinition Height="{Binding Sizes.Unit}" />
-                        <RowDefinition Height="{Binding Sizes.Margin}" />
-                        <RowDefinition Height="{Binding Sizes.Unit}" />
-                        <RowDefinition Height="{Binding Sizes.Margin}" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="{Binding Sizes.Margin}" />
-                        <ColumnDefinition Width="{Binding Sizes.Unit}" />
-                        <ColumnDefinition Width="{Binding Sizes.Margin}" />
-                        <ColumnDefinition Width="{Binding Sizes.Unit}" />
-                        <ColumnDefinition Width="{Binding Sizes.Margin}" />
-                        <ColumnDefinition Width="{Binding Sizes.Unit}" />
-                        <ColumnDefinition Width="{Binding Sizes.Margin}" />
-                        <ColumnDefinition Width="{Binding Sizes.Unit}" />
-                        <ColumnDefinition Width="{Binding Sizes.Margin}" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
-                    <BoxView
+                    <Label
                         Grid.Row="0"
-                        Grid.RowSpan="9"
                         Grid.Column="0"
-                        Grid.ColumnSpan="9"
-                        CornerRadius="{Binding Sizes.CornerRadius}"
-                        Color="Gray" />
-                    <local:TileBackView Grid.Row="1" Grid.Column="1" />
-                    <local:TileBackView Grid.Row="1" Grid.Column="3" />
-                    <local:TileBackView Grid.Row="1" Grid.Column="5" />
-                    <local:TileBackView Grid.Row="1" Grid.Column="7" />
-                    <local:TileBackView Grid.Row="3" Grid.Column="1" />
-                    <local:TileBackView Grid.Row="3" Grid.Column="3" />
-                    <local:TileBackView Grid.Row="3" Grid.Column="5" />
-                    <local:TileBackView Grid.Row="3" Grid.Column="7" />
-                    <local:TileBackView Grid.Row="5" Grid.Column="1" />
-                    <local:TileBackView Grid.Row="5" Grid.Column="3" />
-                    <local:TileBackView Grid.Row="5" Grid.Column="5" />
-                    <local:TileBackView Grid.Row="5" Grid.Column="7" />
-                    <local:TileBackView Grid.Row="7" Grid.Column="1" />
-                    <local:TileBackView Grid.Row="7" Grid.Column="3" />
-                    <local:TileBackView Grid.Row="7" Grid.Column="5" />
-                    <local:TileBackView Grid.Row="7" Grid.Column="7" />
-                    <local:TileView
+                        HorizontalOptions="Start"
+                        Text="Score:"
+                        VerticalOptions="Center" />
+                    <Label
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        HorizontalOptions="Start"
+                        Text="High Score:"
+                        VerticalOptions="Center" />
+                    <Label
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        Margin="5"
+                        FontAttributes="Bold"
+                        FontSize="Large"
+                        HorizontalOptions="FillAndExpand"
+                        HorizontalTextAlignment="End"
+                        Text="{Binding Score}" />
+                    <Label
                         Grid.Row="1"
                         Grid.Column="1"
-                        BindingContext="{Binding Tiles, Converter={x:StaticResource ArrayPicker}, ConverterParameter=0-0}" />
-                    <local:TileView
-                        Grid.Row="1"
-                        Grid.Column="3"
-                        BindingContext="{Binding Tiles, Converter={x:StaticResource ArrayPicker}, ConverterParameter=0-1}" />
-                    <local:TileView
-                        Grid.Row="1"
-                        Grid.Column="5"
-                        BindingContext="{Binding Tiles, Converter={x:StaticResource ArrayPicker}, ConverterParameter=0-2}" />
-                    <local:TileView
-                        Grid.Row="1"
-                        Grid.Column="7"
-                        BindingContext="{Binding Tiles, Converter={x:StaticResource ArrayPicker}, ConverterParameter=0-3}" />
-                    <local:TileView
-                        Grid.Row="3"
-                        Grid.Column="1"
-                        BindingContext="{Binding Tiles, Converter={x:StaticResource ArrayPicker}, ConverterParameter=1-0}" />
-                    <local:TileView
-                        Grid.Row="3"
-                        Grid.Column="3"
-                        BindingContext="{Binding Tiles, Converter={x:StaticResource ArrayPicker}, ConverterParameter=1-1}" />
-                    <local:TileView
-                        Grid.Row="3"
-                        Grid.Column="5"
-                        BindingContext="{Binding Tiles, Converter={x:StaticResource ArrayPicker}, ConverterParameter=1-2}" />
-                    <local:TileView
-                        Grid.Row="3"
-                        Grid.Column="7"
-                        BindingContext="{Binding Tiles, Converter={x:StaticResource ArrayPicker}, ConverterParameter=1-3}" />
-                    <local:TileView
-                        Grid.Row="5"
-                        Grid.Column="1"
-                        BindingContext="{Binding Tiles, Converter={x:StaticResource ArrayPicker}, ConverterParameter=2-0}" />
-                    <local:TileView
-                        Grid.Row="5"
-                        Grid.Column="3"
-                        BindingContext="{Binding Tiles, Converter={x:StaticResource ArrayPicker}, ConverterParameter=2-1}" />
-                    <local:TileView
-                        Grid.Row="5"
-                        Grid.Column="5"
-                        BindingContext="{Binding Tiles, Converter={x:StaticResource ArrayPicker}, ConverterParameter=2-2}" />
-                    <local:TileView
-                        Grid.Row="5"
-                        Grid.Column="7"
-                        BindingContext="{Binding Tiles, Converter={x:StaticResource ArrayPicker}, ConverterParameter=2-3}" />
-                    <local:TileView
-                        Grid.Row="7"
-                        Grid.Column="1"
-                        BindingContext="{Binding Tiles, Converter={x:StaticResource ArrayPicker}, ConverterParameter=3-0}" />
-                    <local:TileView
-                        Grid.Row="7"
-                        Grid.Column="3"
-                        BindingContext="{Binding Tiles, Converter={x:StaticResource ArrayPicker}, ConverterParameter=3-1}" />
-                    <local:TileView
-                        Grid.Row="7"
-                        Grid.Column="5"
-                        BindingContext="{Binding Tiles, Converter={x:StaticResource ArrayPicker}, ConverterParameter=3-2}" />
-                    <local:TileView
-                        Grid.Row="7"
-                        Grid.Column="7"
-                        BindingContext="{Binding Tiles, Converter={x:StaticResource ArrayPicker}, ConverterParameter=3-3}" />
+                        Margin="5"
+                        FontAttributes="Bold"
+                        FontSize="Large"
+                        HorizontalOptions="FillAndExpand"
+                        HorizontalTextAlignment="End"
+                        Text="{Binding HighScore}" />
                 </Grid>
-                <Frame.GestureRecognizers>
-                    <SwipeGestureRecognizer Command="{Binding SwipeLeft}" Direction="Left" />
-                    <SwipeGestureRecognizer Command="{Binding SwipeRight}" Direction="Right" />
-                    <SwipeGestureRecognizer Command="{Binding SwipeUp}" Direction="Up" />
-                    <SwipeGestureRecognizer Command="{Binding SwipeDown}" Direction="Down" />
-                </Frame.GestureRecognizers>
-            </Frame>
-            <Grid Grid.Row="2">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <Button
-                    Grid.Column="1"
-                    Margin="3"
-                    Command="{Binding Reset}"
-                    Text="Reset" />
+                <Frame Grid.Row="1" Padding="0">
+                    <Grid
+                        ColumnSpacing="0"
+                        HorizontalOptions="Center"
+                        RowSpacing="0"
+                        VerticalOptions="Center">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="{Binding Sizes.Margin}" />
+                            <RowDefinition Height="{Binding Sizes.Unit}" />
+                            <RowDefinition Height="{Binding Sizes.Margin}" />
+                            <RowDefinition Height="{Binding Sizes.Unit}" />
+                            <RowDefinition Height="{Binding Sizes.Margin}" />
+                            <RowDefinition Height="{Binding Sizes.Unit}" />
+                            <RowDefinition Height="{Binding Sizes.Margin}" />
+                            <RowDefinition Height="{Binding Sizes.Unit}" />
+                            <RowDefinition Height="{Binding Sizes.Margin}" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="{Binding Sizes.Margin}" />
+                            <ColumnDefinition Width="{Binding Sizes.Unit}" />
+                            <ColumnDefinition Width="{Binding Sizes.Margin}" />
+                            <ColumnDefinition Width="{Binding Sizes.Unit}" />
+                            <ColumnDefinition Width="{Binding Sizes.Margin}" />
+                            <ColumnDefinition Width="{Binding Sizes.Unit}" />
+                            <ColumnDefinition Width="{Binding Sizes.Margin}" />
+                            <ColumnDefinition Width="{Binding Sizes.Unit}" />
+                            <ColumnDefinition Width="{Binding Sizes.Margin}" />
+                        </Grid.ColumnDefinitions>
+                        <BoxView
+                            Grid.Row="0"
+                            Grid.RowSpan="9"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="9"
+                            CornerRadius="{Binding Sizes.CornerRadius}"
+                            Color="Gray" />
+                        <forms:CachedImage
+                            Grid.Row="0"
+                            Grid.RowSpan="9"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="9"
+                            Source="{Binding TopTile, Converter={StaticResource TileToImagePath}}" />
+                        <local:TileBackView Grid.Row="1" Grid.Column="1" />
+                        <local:TileBackView Grid.Row="1" Grid.Column="3" />
+                        <local:TileBackView Grid.Row="1" Grid.Column="5" />
+                        <local:TileBackView Grid.Row="1" Grid.Column="7" />
+                        <local:TileBackView Grid.Row="3" Grid.Column="1" />
+                        <local:TileBackView Grid.Row="3" Grid.Column="3" />
+                        <local:TileBackView Grid.Row="3" Grid.Column="5" />
+                        <local:TileBackView Grid.Row="3" Grid.Column="7" />
+                        <local:TileBackView Grid.Row="5" Grid.Column="1" />
+                        <local:TileBackView Grid.Row="5" Grid.Column="3" />
+                        <local:TileBackView Grid.Row="5" Grid.Column="5" />
+                        <local:TileBackView Grid.Row="5" Grid.Column="7" />
+                        <local:TileBackView Grid.Row="7" Grid.Column="1" />
+                        <local:TileBackView Grid.Row="7" Grid.Column="3" />
+                        <local:TileBackView Grid.Row="7" Grid.Column="5" />
+                        <local:TileBackView Grid.Row="7" Grid.Column="7" />
+                        <local:TileView
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            BindingContext="{Binding Tiles, Converter={x:StaticResource ArrayPicker}, ConverterParameter=0-0}" />
+                        <local:TileView
+                            Grid.Row="1"
+                            Grid.Column="3"
+                            BindingContext="{Binding Tiles, Converter={x:StaticResource ArrayPicker}, ConverterParameter=0-1}" />
+                        <local:TileView
+                            Grid.Row="1"
+                            Grid.Column="5"
+                            BindingContext="{Binding Tiles, Converter={x:StaticResource ArrayPicker}, ConverterParameter=0-2}" />
+                        <local:TileView
+                            Grid.Row="1"
+                            Grid.Column="7"
+                            BindingContext="{Binding Tiles, Converter={x:StaticResource ArrayPicker}, ConverterParameter=0-3}" />
+                        <local:TileView
+                            Grid.Row="3"
+                            Grid.Column="1"
+                            BindingContext="{Binding Tiles, Converter={x:StaticResource ArrayPicker}, ConverterParameter=1-0}" />
+                        <local:TileView
+                            Grid.Row="3"
+                            Grid.Column="3"
+                            BindingContext="{Binding Tiles, Converter={x:StaticResource ArrayPicker}, ConverterParameter=1-1}" />
+                        <local:TileView
+                            Grid.Row="3"
+                            Grid.Column="5"
+                            BindingContext="{Binding Tiles, Converter={x:StaticResource ArrayPicker}, ConverterParameter=1-2}" />
+                        <local:TileView
+                            Grid.Row="3"
+                            Grid.Column="7"
+                            BindingContext="{Binding Tiles, Converter={x:StaticResource ArrayPicker}, ConverterParameter=1-3}" />
+                        <local:TileView
+                            Grid.Row="5"
+                            Grid.Column="1"
+                            BindingContext="{Binding Tiles, Converter={x:StaticResource ArrayPicker}, ConverterParameter=2-0}" />
+                        <local:TileView
+                            Grid.Row="5"
+                            Grid.Column="3"
+                            BindingContext="{Binding Tiles, Converter={x:StaticResource ArrayPicker}, ConverterParameter=2-1}" />
+                        <local:TileView
+                            Grid.Row="5"
+                            Grid.Column="5"
+                            BindingContext="{Binding Tiles, Converter={x:StaticResource ArrayPicker}, ConverterParameter=2-2}" />
+                        <local:TileView
+                            Grid.Row="5"
+                            Grid.Column="7"
+                            BindingContext="{Binding Tiles, Converter={x:StaticResource ArrayPicker}, ConverterParameter=2-3}" />
+                        <local:TileView
+                            Grid.Row="7"
+                            Grid.Column="1"
+                            BindingContext="{Binding Tiles, Converter={x:StaticResource ArrayPicker}, ConverterParameter=3-0}" />
+                        <local:TileView
+                            Grid.Row="7"
+                            Grid.Column="3"
+                            BindingContext="{Binding Tiles, Converter={x:StaticResource ArrayPicker}, ConverterParameter=3-1}" />
+                        <local:TileView
+                            Grid.Row="7"
+                            Grid.Column="5"
+                            BindingContext="{Binding Tiles, Converter={x:StaticResource ArrayPicker}, ConverterParameter=3-2}" />
+                        <local:TileView
+                            Grid.Row="7"
+                            Grid.Column="7"
+                            BindingContext="{Binding Tiles, Converter={x:StaticResource ArrayPicker}, ConverterParameter=3-3}" />
+                    </Grid>
+                    <Frame.GestureRecognizers>
+                        <SwipeGestureRecognizer Command="{Binding SwipeLeft}" Direction="Left" />
+                        <SwipeGestureRecognizer Command="{Binding SwipeRight}" Direction="Right" />
+                        <SwipeGestureRecognizer Command="{Binding SwipeUp}" Direction="Up" />
+                        <SwipeGestureRecognizer Command="{Binding SwipeDown}" Direction="Down" />
+                    </Frame.GestureRecognizers>
+                </Frame>
+                <Grid Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Button
+                        Grid.Column="1"
+                        Margin="3"
+                        Command="{Binding Reset}"
+                        Text="Reset" />
+                </Grid>
             </Grid>
-        </Grid>
-    </StackLayout>
+        </StackLayout>
+        <ActivityIndicator
+            HorizontalOptions="CenterAndExpand"
+            IsRunning="{Binding IsBusy}"
+            VerticalOptions="CenterAndExpand" />
+    </AbsoluteLayout>
 </ContentPage>

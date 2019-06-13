@@ -20,7 +20,7 @@ namespace Game2048
         protected override void OnStart()
         {
             // Handle when your app starts
-            _mainVm.LoadState();
+            _mainVm.Init();
         }
 
         protected override void OnSleep()

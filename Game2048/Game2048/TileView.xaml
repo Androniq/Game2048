@@ -3,6 +3,7 @@
     x:Class="Game2048.TileView"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:forms="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
     xmlns:local="clr-namespace:Game2048;assembly=Game2048"
     Margin="0"
     Padding="0"
@@ -21,17 +22,16 @@
                 MinimumHeightRequest="{Binding Unit, Source={x:Static local:Sizes.Instance}}"
                 MinimumWidthRequest="{Binding Unit, Source={x:Static local:Sizes.Instance}}"
                 WidthRequest="{Binding Unit, Source={x:Static local:Sizes.Instance}}">
-                <BoxView
-                    Margin="0"
-                    CornerRadius="{Binding CornerRadius, Source={x:Static local:Sizes.Instance}}"
+                <forms:CachedImage
                     HeightRequest="{Binding Unit, Source={x:Static local:Sizes.Instance}}"
-                    WidthRequest="{Binding Unit, Source={x:Static local:Sizes.Instance}}"
-                    Color="{Binding Value2, Converter={StaticResource ValueColorConverter}}" />
+                    Opacity="0.8"
+                    Source="{Binding Value2, Converter={StaticResource TileToImagePath}}"
+                    WidthRequest="{Binding Unit, Source={x:Static local:Sizes.Instance}}" />
                 <Label
-                    HorizontalOptions="CenterAndExpand"
-                    HorizontalTextAlignment="Center"
+                    HorizontalOptions="Start"
+                    HorizontalTextAlignment="Start"
                     Text="{Binding Value2}"
-                    VerticalOptions="Center" />
+                    VerticalOptions="End" />
             </Grid>
             <Grid
                 x:Name="Fill2"
@@ -40,17 +40,16 @@
                 MinimumHeightRequest="{Binding Unit, Source={x:Static local:Sizes.Instance}}"
                 MinimumWidthRequest="{Binding Unit, Source={x:Static local:Sizes.Instance}}"
                 WidthRequest="{Binding Unit, Source={x:Static local:Sizes.Instance}}">
-                <BoxView
-                    Margin="0"
-                    CornerRadius="{Binding CornerRadius, Source={x:Static local:Sizes.Instance}}"
+                <forms:CachedImage
                     HeightRequest="{Binding Unit, Source={x:Static local:Sizes.Instance}}"
-                    WidthRequest="{Binding Unit, Source={x:Static local:Sizes.Instance}}"
-                    Color="{Binding Value2, Converter={StaticResource ValueColorConverter}}" />
+                    Opacity="0.8"
+                    Source="{Binding Value2, Converter={StaticResource TileToImagePath}}"
+                    WidthRequest="{Binding Unit, Source={x:Static local:Sizes.Instance}}" />
                 <Label
-                    HorizontalOptions="CenterAndExpand"
-                    HorizontalTextAlignment="Center"
+                    HorizontalOptions="Start"
+                    HorizontalTextAlignment="Start"
                     Text="{Binding Value2}"
-                    VerticalOptions="Center" />
+                    VerticalOptions="End" />
             </Grid>
         </Grid>
     </ContentView.Content>

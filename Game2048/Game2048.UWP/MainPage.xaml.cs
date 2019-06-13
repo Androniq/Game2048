@@ -21,6 +21,8 @@ namespace Game2048.UWP
         {
             this.InitializeComponent();
 
+            FFImageLoading.Forms.Platform.CachedImageRenderer.Init();
+
             LoadApplication(new Game2048.App());
         }
     }

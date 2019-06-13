@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using FFImageLoading;
+using FFImageLoading.Work;
 using Game2048.Mvvm;
 using PCLStorage;
 using Xamarin.Forms;
@@ -50,6 +52,17 @@ namespace Game2048
             set => SetValue(ref _highScore, value);
         }
 
+        private int _topTile;
+
+        /// <summary>
+        /// Gets or sets TopTile value.
+        /// </summary>
+        public int TopTile
+        {
+            get => _topTile;
+            set => SetValue(ref _topTile, value);
+        }
+
         public MainVm()
         {
             _random = new Random();
@@ -86,6 +99,17 @@ namespace Game2048
             SwipeUp = new Command(SwipeUpCommand);
             SwipeDown = new Command(SwipeDownCommand);
             Reset = new Command(ResetCommand);
+        }
+
+        public async Task LoadImages()
+        {
+            var service = FFImageLoading.ImageService.Instance;
+            var list = new List<IImageLoaderTask>();
+            for (var x = 2; x < 8192; x *= 2)
+            {
+                list.Add(service.LoadFile($"/storage/emulated/0/DCIM/Download/{x}.gif").Preload());
+            }
+            await Task.WhenAll(list.Select(it => it.RunAsync()));
         }
 
         private bool AddTile()
@@ -152,6 +176,7 @@ namespace Game2048
             }
 
             Score = 0;
+            TopTile = 2;
 
             AddTile();
             AddTile();
@@ -236,8 +261,11 @@ namespace Game2048
                     }
                     else if (prevTile.Value == tile.Value)
                     {
-                        prevTile.SetValue(2 * tile.Value);
-                        Score += 2 * tile.Value;
+                        var twiceValue = 2 * tile.Value;
+                        prevTile.SetValue(twiceValue);
+                        Score += twiceValue;
+                        if (twiceValue > TopTile)
+                            TopTile = twiceValue;
                         tile.Clear();
                         success = true;
                         newIndex++;
@@ -279,9 +307,33 @@ namespace Game2048
         public async Task LoadState()
         {
             var storage = FileSystem.Current.LocalStorage;
-            //var fileExists = await storage.CheckExistsAsync("state");
             var file = await storage.CreateFileAsync("state", CreationCollisionOption.OpenIfExists);
             SetState(await file.ReadAllTextAsync());
+        }
+
+        private bool _isBusy;
+
+        /// <summary>
+        /// Gets or sets IsBusy value.
+        /// </summary>
+        public bool IsBusy
+        {
+            get => _isBusy;
+            set => SetValue(ref _isBusy, value);
+        }
+
+        public async Task Init()
+        {
+            try
+            {
+                IsBusy = true;
+                await LoadImages();
+                await LoadState();
+            }
+            finally
+            {
+                IsBusy = false;
+            }
         }
 
         private string GetState()
@@ -312,11 +364,14 @@ namespace Game2048
             if (numbers.Length != 18)
                 throw new FormatException();
             var index = 0;
+            var maxVal = 2;
             for (var x = 0; x < 4; x++)
             {
                 for (var y = 0; y < 4; y++)
                 {
                     var value = int.Parse(numbers[index++]);
+                    if (value > maxVal)
+                        maxVal = value;
                     if (value > 0)
                         Tiles[x, y].SetValue(value);
                     else
@@ -325,6 +380,7 @@ namespace Game2048
             }
             Score = int.Parse(numbers[index++]);
             HighScore = int.Parse(numbers[index]);
+            TopTile = maxVal;
         }
     }
 }

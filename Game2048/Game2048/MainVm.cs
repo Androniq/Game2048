@@ -154,7 +154,9 @@ namespace Game2048
 
         public async Task LoadSets()
         {
-            var folder = await FileSystem.Current.GetFolderFromPathAsync("/storage/emulated/0/DCIM/Download/");
+            var folder = await FileSystem.Current.GetFolderFromPathAsync(PathToFiles.Path) ??
+                         await FileSystem.Current.GetFolderFromPathAsync(PathToFiles.Path2) ??
+                         FileSystem.Current.LocalStorage;
             var items = await folder.GetFoldersAsync();
             foreach (var item in items)
             {
@@ -169,7 +171,7 @@ namespace Game2048
             Progress = "Progress: 0%";
             for (int x = 2, progress = 1; x < 8192; x *= 2, progress++)
             {
-                await service.LoadFile($"/storage/emulated/0/DCIM/Download/{SelectedSet}/{x}.gif").Preload().RunAsync();
+                await service.LoadFile($"{PathToFiles.Path}{SelectedSet}/{x}.gif").Preload().RunAsync();
                 var pct = Math.Min(100, progress * 100 / 12);
                 Progress = $"Progress: {pct}%";
                 ((MainPage)Application.Current.MainPage).SetProgress(pct);
@@ -419,6 +421,10 @@ namespace Game2048
             {
                 IsStarting = true;
                 await LoadSets();
+            }
+            catch (Exception e)
+            {
+                App.Current.MainPage.DisplayAlert(e.GetType().Name, e.Message, "Ok");
             }
             finally
             {

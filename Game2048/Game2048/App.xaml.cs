@@ -32,5 +32,11 @@ namespace Game2048
         {
             // Handle when your app resumes
         }
+
+        public async void Handle(object sender, UnhandledExceptionEventArgs args)
+        {
+            await MainPage.DisplayAlert(args.ExceptionObject?.GetType().Name ?? "NULL",
+                (args.ExceptionObject as Exception)?.Message ?? "NULL", "OK");
+        }
     }
 }

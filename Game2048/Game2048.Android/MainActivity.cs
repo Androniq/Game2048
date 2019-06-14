@@ -6,6 +6,7 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Android.OS;
+using Environment = System.Environment;
 
 namespace Game2048.Droid
 {
@@ -21,7 +22,9 @@ namespace Game2048.Droid
             FFImageLoading.Forms.Platform.CachedImageRenderer.Init(enableFastRenderer: true);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
 
-            LoadApplication(new App());
+            var app = new App();
+            AppDomain.CurrentDomain.UnhandledException += app.Handle;
+            LoadApplication(app);
         }
     }
 }
